@@ -1,0 +1,24 @@
+/* components/watermark/index.wxss */
+
+.absoluteCenter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.topControl{
+  position: absolute;
+}
+
+.btmControl {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: white;
+}
+
+.camera{
+  position: absolute;
+  z-index: -99;
+}

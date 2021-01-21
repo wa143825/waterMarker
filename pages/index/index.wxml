@@ -1,0 +1,6 @@
+<!--index.wxml-->
+<view class="container">
+
+  <water-mark />
+
+</view>

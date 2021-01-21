@@ -1,0 +1,165 @@
+<view class="wrapper">
+  <canvas type="2d" id="mainCanvas" class="canvas" disable-scroll="{{true}}"
+    style="width: {{canvasWidth}}px; height: {{canvasHeight}}px;position:absolute;left:{{canvasLeft}}px;top:{{canvasTop}}px;z-index:0"
+    bindtouchstart="touchstart" bindtouchmove="touchmove" bindtouchend="touchend"></canvas>
+
+  <!-- <canvas type="2d" id="draft" class="canvas"
+  style="width: {{canvasWidth}}px; height: {{canvasHeight}}px;position:absolute;left:{{-canvasWidth}}px;top:{{canvasTop}}px;"></canvas> -->
+
+  <block style="position:absolute;z-index:9">
+    <!--top menu-->
+    <view wx:if="{{menuBtnHeight}}"
+      style="position:absolute;left:0;top:{{menuBtnTop}}px;display:flex;width:100%;flex-direction:row;justify-content:center;height:{{menuBtnHeight}}px;">
+      <view
+        style="position:absolute;left:20rpx;border:4rpx solid #fff;border-radius:{{menuBtnHeight-4}}px;font-size:26rpx;padding:0 32rpx;color:#fff;height:{{menuBtnHeight-4}}px;line-height:{{menuBtnHeight-4}}px;"
+        bindtap="bindQuit">
+        退出</view>
+      <view style="display:flex;width:{{menuBtnHeight*3}}px;align-items:center;justify-content:space-around;color:#fff">
+        <view style="padding:0 8rpx;" bindtap="bindUndo">
+          <!-- <image src="./images/undo.png" style="width:{{menuBtnHeight}}px;height:{{menuBtnHeight}}px" /> -->
+          <text class="pano pano-undo" style="font-size:{{menuBtnHeight-4}}px;"></text>
+        </view>
+        <view style="padding:0 8rpx;" bindtap="bindRedo">
+          <!-- <image src="./images/redo.png" style="width:{{menuBtnHeight}}px;height:{{menuBtnHeight}}px" /> -->
+          <text class="pano pano-redo" style="font-size:{{menuBtnHeight-4}}px;"></text>
+        </view>
+      </view>
+    </view>
+    <!--top menu end-->
+    <!-- <view style="position:fixed;bottom:100px;color:#aaa">
+  <view bindtap="clearAll">清除</view>
+</view> -->
+
+    <!--input ruler-->
+    <view wx:if="{{showInputRuler}}"
+      style="position:absolute;bottom:{{keyboardHeight}}px;width:100%;z-index:100;background:#eeeeee;padding:4px;">
+      <view style="display:flex;flex-direction:row;" catchtap="bindNullTap">
+        <view style="flex:1;border:1px solid #ddd;padding:4px;border-radius:4px;background:#fff">
+          <input bindinput="bindInputRuler" bindfocus="bindInputFocus" type="digit" placeholder="请填写尺寸"
+            auto-focus="{{autoFocus}}" cursor-spacing="16" adjust-position="{{flase}}"
+            disable-default-padding="{{true}}" style="padding:4rpx 10rpx;background-color:#fff;"
+            value="{{inputRuler}}" />
+        </view>
+
+        <view style="width:140rpx;max-height:80rpx;padding:0 20rpx;">
+          <view bindtap="tapUpdateRuler"
+            style="height:100%;background:#0170fe;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;border-radius:4px;">
+            <text>确定</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    <!--input ruler-->
+
+    <!--order menu-->
+    <view wx:if="{{showInputOrder}}" class="mask-panel"
+      style="padding:4px;position:absolute;bottom:{{keyboardHeight}}px;" catchtap="bindNullTap">
+
+      <view style="display:flex;flex-direction:row;">
+        <view style="flex:1;display:flex;border:1px solid #ddd;padding:4px;border-radius:4px;">
+          <text
+            style="background:{{foreColor}};color:#fff;width:60rpx;height:60rpx;line-height:60rpx;text-align:center;border-radius:50%;">{{orderNo}}</text>
+          <input bindinput="bindInputOrder" bindfocus="bindInputFocus" placeholder="序号备注（可不填）" cursor-spacing="16"
+            auto-focus="{{autoFocus}}" adjust-position="{{flase}}" disable-default-padding="{{true}}"
+            style="padding:4rpx 10rpx;background-color:#fff;line-height:60rpx;" value="{{inputOrder}}" />
+        </view>
+
+        <view style="width:140rpx;max-height:80rpx;padding:0 20rpx;">
+          <view bindtap="tapAddOrder"
+            style="height:100%;background:#0170fe;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;border-radius:4px;">
+            <text>确定</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    <!--order menu end-->
+
+    <!--text menu-->
+
+    <view wx:if="{{showInputText}}" class="mask-panel"
+      style="padding:4px;position:absolute;bottom:{{keyboardHeight}}px;" catchtap="bindNullTap">
+
+      <view style="display:flex;flex-direction:row;">
+        <view style="flex:1;border:1px solid #ddd;padding:4px;border-radius:4px;">
+          <textarea style="width:100%;padding:2px 4px;" bindinput="bindInputText" placeholder="在这输入文字" name="textarea"
+            cursor-spacing="16" auto-height="true" adjust-position="{{flase}}" disable-default-padding="{{true}}"
+            auto-focus="{{autoFocus}}" show-confirm-bar="{{flase}}" value="{{inputText}}" />
+          </view>
+
+      <view style="width:140rpx;max-height:80rpx;padding:0 20rpx;">
+          <view bindtap="bindInputSubmit" style="height:100%;background:#0170fe;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;border-radius:4px;">
+            <text>确定</text>
+          </view>
+      </view>
+    </view>
+  
+</view>
+
+<view style="position:absolute;top:20px;left:-1000px;">
+	<text id="textPreview" style="font-size:{{font.size}}px">{{inputText}}</text>
+</view>
+<!--text menu end-->
+
+<!--color menu-->
+<view style="z-index:99;position:absolute;left:0;bottom:140rpx;display:flex;width:120rpx;height:90rpx;justify-content:center;align-items:center;"  bindtap="tabShowColorMenu">
+  <view style="background-color:{{foreColor}}" class="color-item color-item-border"></view>
+</view>
+
+<!--color bar -->
+<view wx:if="{{showColorMenu}}" style="position:absolute;bottom:140rpx;display: flex;justify-content:flex-start;align-items:center;width:100%;background:rgba(10,10,10,0.8);height:90rpx;padding:0 20rpx 0 120rpx;">
+    
+      <scroll-view scroll-x="{{true}}" show-scrollbar="{{flase}}" enhanced ="{{true}}" style="width:{{colorBarWidth}}px;white-space: nowrap;height:64rpx;border-left:4rpx solid #fff;">
+      <view wx:for="{{colorItems}}" wx:key="idx" class="color-item {{item == '#000000' ? 'color-item-border' : ''}}"
+        data-id="{{item}}" catchtap="tapChangeColor" style="border-width:2rpx;background: {{item}};">
+        <!-- <view style="position:relative;top:4px;left:4px;background: {{item}};width:30px;height:30px;"></view> -->
+      </view>
+
+    </scroll-view>
+  
+ 
+</view>
+ <!--color bar-->
+<!--color menu-->
+
+<!--shape bar -->
+<view wx:if="{{showShapeMenu}}" style="position:fixed;bottom:140rpx;display: flex;justify-content:flex-start;align-items:center;width:100%;background:rgba(10,10,10,0.8);height:90rpx;padding:0 20rpx 0 120rpx;">
+    
+    <scroll-view scroll-x="{{true}}" show-scrollbar="{{flase}}" style="width:{{colorBarWidth}}px;white-space: nowrap;height:64rpx;border-left:4rpx solid #fff;">
+        <view wx:for="{{shapeItems}}" wx:key="idx" class="color-item {{item.active ? 'active-shape' : ''}}"
+          data-id="{{item.id}}" catchtap="tapChangeShape" style="width:58rpx;height:58rpx;line-height:54rpx;margin-left:40rpx;color:#fff;text-align:center;">
+          <!-- <image src="{{item.icon}}" style="width:54rpx;height:54rpx;"></image> -->
+          <text class="pano pano-{{item.icon}}" style="font-size:50rpx;"></text>
+          <!-- <text>{{item.title}}</text> -->
+        </view>
+  
+      </scroll-view>
+
+  </view>
+   <!--shape bar-->
+
+<!--remove tips-->
+<view wx:if="{{showRemoveTips}}" style="z-index:9999;position:absolute;top:{{canvasTop + canvasHeight}}px;width:100%;min-height:120rpx ">
+  <view wx:if="{{removeActive}}" style="background:rgba(255,0,0,0.9);color:#fff;display:flex;flex-direction:column;align-items:center;padding:8rpx 0;">
+    <text class="pano pano-remove2" style="font-size:50rpx;"></text>
+    <text>松手即可删除</text>
+  </view>
+  <view wx:else style="background:rgba(0,0,0,0.9);color:#fff;display:flex;flex-direction:column;align-items:center;padding:8rpx 0;">
+    <text class="pano pano-remove1" style="font-size:50rpx;"></text>
+    <text>拖动到此处删除</text>
+  </view>
+</view>
+<!--remove tips-->
+<!--tabItems -->
+<view style="position:fixed;bottom:0;display:flex;width:100%;height:120rpx;color:#fff;">
+  <view bindtap="bindTabItem" wx:for="{{tabItems}}" wx:key="idx" data-id="{{item.id}}" data-index="{{index}}" class="{{item.active ? 'activeTab' : ''}}" style="flex:1;text-align:center;font-size:24rpx;display:flex;flex-direction:column;align-items:center;justify-content:space-around;">
+    <text class="pano pano-{{item.icon}}" style="font-size:50rpx;"></text>
+    <view>{{item.title}}</view>
+    </view>
+    <view bindtap="bindTabSave"  data-id="save"  style="flex:1;text-align:center;font-size:24rpx;display:flex;align-items:center;">
+    <!-- <text class="pano pano-{{item.icon}}" style="font-size:50rpx;"></text> -->
+    <view style="border-radius:80rpx;background:#0170fe;width:96%;height:60rpx;line-height:60rpx;">保存</view>
+    </view>
+</view>
+<!--tabItems end-->
+</block>
+</view>

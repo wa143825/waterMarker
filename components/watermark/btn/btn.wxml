@@ -1,0 +1,7 @@
+<view class='cameraBtn' bindtouchstart="btnTS" bindtouchend="btnTE" >
+	<canvas type="2d" id="btncanvas" class="canvas" style="width: 80px; height: 80px;" ></canvas>
+	<view class="btnContext">
+		<view>轻触拍照</view>
+		<view>长按摄像</view>
+	</view>
+</view>

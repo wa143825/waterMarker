@@ -1,0 +1,75 @@
+
+.wrapper {
+  background-color: #000000;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+.mask {
+  /* position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 99999;
+  top: 0;
+  left: 0; */
+}
+
+.mask-panel {
+  position: absolute;
+  bottom: 0;
+  background: #fff;
+  width: 100%;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  z-index: 99999;
+}
+
+.color-item {
+  width: 60rpx;
+  height: 60rpx;
+  display: inline-block;
+  margin-left: 20rpx;
+  border-radius: 50%;
+
+}
+
+.color-item-border {
+  border: 4rpx solid #fff;
+  box-sizing: border-box;
+}
+
+
+.active-color {
+  border: 1px dashed orange;
+  box-sizing: border-box;
+}
+
+.active-shape {
+  border: 4rpx solid #0170fe;
+  border-radius: 4rpx;
+  box-sizing: border-box;
+}
+
+.handle {
+  position: absolute;
+  border: 2px dashed orange;
+  /* overflow: visible; */
+  box-sizing: border-box;
+}
+
+.handle .corner-btn {
+  width: 60rpx;
+  height: 60rpx;
+  position: absolute;
+}
+
+.active {
+  color: #0170fe;
+}
+
+.activeTab {
+  /* background-color: #0170fe; */
+  color: #0170fe;
+}

@@ -1,0 +1,30 @@
+<!--components/watermark/index.wxml-->
+
+<view>
+	
+	<camera wx:if="{{!bgImg}}" class="camera" style="height: {{cameraH}}px; width: {{cameraW}}px"></camera>
+	<canvas 
+		bindtouchstart="start" 
+		bindtouchmove="move" 
+		canvas-id="canvas" 
+		id="canvas" 
+		disableScroll="true"
+		style="height: {{cameraH}}px; width: {{cameraW}}px; position: absolute;" 
+
+	>
+	</canvas>
+
+	<image wx:if="{{bgImg}}" src='{{bgImg}}' style="height: {{cameraH}}px; width: {{cameraW}}px; position: absolute;" > </image>
+
+
+	<!-- <view class="topControl">1</view> -->
+
+	<view class="btmControl" style="height: {{bcH}}px;">
+		<view bindtap="insert">文字</view>
+		<view bindtap="savePhoto">保存</view>
+		<btnCamera bind:takePhoto="takePhoto"></btnCamera>
+	</view>
+</view>
+
+
+
