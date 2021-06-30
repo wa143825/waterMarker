@@ -1,0 +1,4 @@
+<!--pages/webview.wxml-->
+<video controls="{{control}}" src="">
+	<web-view src="https://web.gstarcad.com/openDwg?fileId=9a3c269135fc9b82&position=27ec5d08c90dd541&from=41c7b071559e8647&type=27ec5d08c90dd541&id=e01e3894ad4a6d90"></web-view>
+</video>

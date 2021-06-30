@@ -1,4 +1,6 @@
 /* components/watermark/index.wxss */
+@import './font.wxss';
+
 
 .absoluteCenter {
   display: flex;
@@ -16,6 +18,10 @@
   bottom: 0;
   width: 100%;
   background: white;
+}
+
+.text{
+  font-family: 'Quartz';
 }
 
 .camera{

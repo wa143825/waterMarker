@@ -1,0 +1,15 @@
+/* components/watermark/btn/btn.wxss */
+.cameraBtn{
+  height: 160rpx;
+  width: 160rpx;
+  border-radius: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 28rpx;
+}
+
+.canvas{
+  position: absolute;
+}

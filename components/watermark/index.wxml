@@ -6,6 +6,7 @@
 	<canvas 
 		bindtouchstart="start" 
 		bindtouchmove="move" 
+		bindtouchend="stop"
 		canvas-id="canvas" 
 		id="canvas" 
 		disableScroll="true"
@@ -22,6 +23,7 @@
 	<view class="btmControl" style="height: {{bcH}}px;">
 		<view bindtap="insert">文字</view>
 		<view bindtap="savePhoto">保存</view>
+		<Text class="text">123456</Text>
 		<btnCamera bind:takePhoto="takePhoto"></btnCamera>
 	</view>
 </view>

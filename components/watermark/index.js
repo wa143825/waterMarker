@@ -2,11 +2,79 @@
 // bc  bottomControl 底部控制栏
 // 
 
-let stuff = '../../assets/stuff.png'
-
 import {
-	dragImg
+	dragImg,
 } from './utils'
+
+
+const mark1 = {
+	fixed: [
+		{
+			mode: 'image',
+			url: '/assets/item1/bg.png',
+			left: 0,
+			top: 0,
+			width: 180,
+			height: 50,
+		},
+		{
+			mode: 'image',
+			url: '/assets/item1/weather.png',
+			left: 12,
+			top: 12,
+			width: 26,
+			height: 26,
+		},
+		{
+			mode: 'text',
+			left: 44,
+			top: 18,
+			content: '早安',
+			color: "#ffffff",
+		 	align: "left",
+			size: 20,
+			bold: false
+		},
+		{
+			label: 'time',
+			mode: 'text',
+			left: 108,
+			top: 14,
+			content: '08:00',
+			color: "#000000",
+		 	align: "left",
+			size: 24,
+			font: 'Quartz',
+			bold: true
+		},
+	],
+	editor: [
+		{
+			mode: 'text',
+			content: '华中光彩大市场',
+			color: "#ffffff",
+		 	align: "left",
+			size: 16,
+			bold: false
+		},
+		{
+			mode: 'text',
+			content: '2020-12-31 星期四',
+			color: "#ffffff",
+		 	align: "left",
+			size: 16,
+			bold: false,
+		},
+		{
+			mode: 'text',
+			content: '今天的天气不错，我们去哪里吃饭好呐？',
+			color: "#ffffff",
+		 	align: "left",
+			size: 16,
+			bold: false
+		},
+	]
+}
 
 
 Component({
@@ -18,17 +86,24 @@ Component({
 		camera: null,
 		bgImg: '',
 		ctx: null,
-		
+		clockInterval: null,
+		time: '',
+		animation: null,
 		dragArr: [],
 	},
 
 	lifetimes: {
 		attached() {
+			// this.clock()
+
 			this.initSize()
 			this.data.ctx = wx.createCanvasContext("canvas", this);
 			this.data.camera = wx.createCameraContext();
-			this.insert()
+			this.onArrChange(mark1, 180)
 		},
+		detached() {
+			// clearInterval(this.clockInterval);
+		}
 	},
 	
 
@@ -42,56 +117,14 @@ Component({
 				bcH: res.windowHeight * 0.25
 			})
 		},
-
-		insert() {
-
-			const item = [
-				{
-					mode: 'image',
-					url: 'https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/09f4187fbca948239f0f8d15f7fdd65a~tplv-k3u1fbpfcp-watermark.image',
-					left: 0,
-					top: 0,
-					width: 120,
-					height: 130,
-
-				}
-			]
-
-			let content =  ['非常宅', '湖北省襄阳市返程']
-			wx.getImageInfo({
-				src: '../../assets/stuff.png',
-				success: (res) => {
-					const scale = this.getScale(res.width, res.height)
-					console.log(res);
-					let img = {
-						width: res.width/scale,
-						height: res.height/scale,
-						url: res.path
-					}
-					this.onArrChange(img ,content)
-				}
-			})
-		},
 		
-		onArrChange(img, content) {
-			let fontSize = 24
-			let h, w
-			if(content) {
-				this.data.ctx.font=`${fontSize}px SimSun, Songti SC`
-				let textMaxWidth =  Math.max.apply(null, content.map(e => this.data.ctx.measureText(e).width));
-				h = img.height + content.length * fontSize
-				w = Math.max( img.width, textMaxWidth )
-			} else {
-				h = img.height
-				w = img.width
-			}
-
-			const item = new dragImg(img, this.data.ctx, content, w, h, fontSize)
+		onArrChange(mark, w) {
+			const item = new dragImg(this.data.ctx, mark, w)
 			this.data.dragArr[0] = item
 			this.draw()
 		},
 		
-
+		// 画布鼠标按下
     start(e) {
       this.data.clickedkArr = []
       const { x, y } = e.touches[0]
@@ -128,6 +161,7 @@ Component({
       this.data.startTouch = { startX : x, startY : y }
     },
 		
+		//画布鼠标拖动
 		move(e) {
       const { x, y } = e.touches[0]
       const { initialX, initialY } = this.data.initial
@@ -157,34 +191,23 @@ Component({
             lastImg.x = initialX - (lineB - lineA) / 2;
             lastImg.y = initialY - (lineB - lineA) / 2;
           }
-        }
-        this.draw()
+				}
+				setTimeout(()=> {
+					this.draw()
+				}, 30)
       }
-    },
+		},
+		
+		stop() {
+		},
 		
 
-    draw() {
+    draw(t) {
 			this.data.dragArr.forEach(node => node.render())
 			this.data.ctx.draw()
 		},
-		
 
-		getScale(width,height){
-			console.log(width, height);
-			if (width >= height) {
-				if (height <= 120) {
-					return 1;
-				} else {
-					return height / 120;
-				}
-			} else if (height > width) {
-				if (width <= 120) {
-					return 1;
-				} else return width / 120;
-			}
-		},
-
-
+		// 拍照
 		takePhoto() {
 			console.log('takePhoto');
 			this.data.camera.takePhoto({
@@ -201,7 +224,7 @@ Component({
 				}
 			})
 		},
-
+		// 保存照片
 		savePhoto() {
 			this.data.ctx.drawImage(this.data.bgImg, 0, 0, this.cameraW, this.cameraH)
 			this.data.dragArr.forEach(node => node.render())
@@ -229,6 +252,26 @@ Component({
 					}
 				}, this)
 			})
+		},
+
+		changeText(label, content) {
+
+		},
+
+		clock() {
+			
+			let t = () => {
+				let d = new Date();
+				let h = d.getHours() > 9 ? d.getHours() : '0' + d.getHours()
+				let m = d.getMinutes() > 9 ? d.getMinutes() : '0' + d.getMinutes()
+				let s = d.getSeconds() > 9 ? d.getSeconds() : '0' + d.getSeconds()
+				mark1.fixed[3].content = `${m}:${s}`
+				this.data.dragArr.forEach(node => node.changeText(mark1))
+				this.draw()
+			}
+			setTimeout(t, 0)
+			this.data.clockInterval = setInterval(t, 1000)
+			
 		}
 	}
 })

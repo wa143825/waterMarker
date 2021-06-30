@@ -1,6 +1,7 @@
 {
   "usingComponents": {
     "mark-image": "../../components/mark-image/mark-image",
-    "water-mark": "../../components/watermark/index"
+    "water-mark": "../../components/watermark/index",
+    "html-wm": "../../components/html2wm/index"
   }
 }
